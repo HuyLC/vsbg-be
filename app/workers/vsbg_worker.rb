@@ -16,17 +16,18 @@ class VsbgWorker
     response[:data].each do |e|
       vsbg = Vsbg.find_by(post_id: e[:id])
       if vsbg.nil?
-        puts "#{Time.now}********************Create**********************"
+        next unless e[:full_picture].present?
+        puts "#{Time.now} VSBG ********************Create #{e[:from][:name]} **********************"
         Vsbg.create(post_id: e[:id], full_picture_url: e[:full_picture],
                     likes_count: e[:likes][:count],
                     name: e[:from][:name], fb_id: e[:from][:id],
                     object_id: e[:object_id], created_at: e[:created_time])
       else
-        puts "#{Time.now}********************Update***********************"
-        vsbg.destroy if vsbg.full_picture_url.nil?
+        puts "#{Time.now} VSBG********************Update #{vsbg.id} ***********************"
+        vsbg.destroy if vsbg.full_picture_url.nil? || vsbg.photo.nil?
         vsbg.update(likes_count: e[:likes][:count])
       end
     end
-    perform(response[:paging][:next])
+    # perform(response[:paging][:next])
   end
 end

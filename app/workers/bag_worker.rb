@@ -16,17 +16,18 @@ class BagWorker
     response[:data].each do |e|
       bag = Bag.find_by(post_id: e[:id])
       if bag.nil?
-        puts "#{Time.now}********************Create**********************"
+        next unless e[:full_picture].present?
+        puts "#{Time.now} BAG ********************Create #{e[:from][:name]}**********************"
         Bag.create(post_id: e[:id], full_picture_url: e[:full_picture],
                    likes_count: e[:likes][:count],
                    name: e[:from][:name], fb_id: e[:from][:id],
                    object_id: e[:object_id], created_at: e[:created_time])
       else
-        puts "#{Time.now}********************Update***********************"
-        bag.destroy if bag.full_picture_url.nil?
+        puts "#{Time.now} BAG ********************Update #{bag.id}***********************"
+        bag.destroy if bag.full_picture_url.nil? || bag.photo.nil?
         bag.update(likes_count: e[:likes][:count])
       end
     end
-    perform(response[:paging][:next])
+    # perform(response[:paging][:next])
   end
 end

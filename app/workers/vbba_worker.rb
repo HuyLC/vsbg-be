@@ -16,17 +16,18 @@ class VbbaWorker
     response[:data].each do |e|
       vbba = Vbba.find_by(post_id: e[:id])
       if vbba.nil?
-        puts "#{Time.now}********************Create**********************"
+        next unless e[:full_picture].present?
+        puts "#{Time.now} VBBA ********************Create #{e[:from][:name]} **********************"
         Vbba.create(post_id: e[:id], full_picture_url: e[:full_picture],
                     likes_count: e[:likes][:count],
                     name: e[:from][:name], fb_id: e[:from][:id],
                     object_id: e[:object_id], created_at: e[:created_time])
       else
-        puts "#{Time.now}********************Update***********************"
-        vbba.destroy if vbba.full_picture_url.nil?
+        puts "#{Time.now} VBBA ********************Update #{vbba.id} ***********************"
+        vbba.destroy if vbba.full_picture_url.nil? || vbba.photo.nil?
         vbba.update(likes_count: e[:likes][:count])
       end
     end
-    perform(response[:paging][:next])
+    # perform(response[:paging][:next])
   end
 end
