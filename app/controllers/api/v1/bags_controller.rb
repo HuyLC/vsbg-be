@@ -1,8 +1,4 @@
 class Api::V1::BagsController < Api::ApisController
-  def data
-    BagWorker.perform_async('')
-  end
-
   def index
     bags = Bag.desc
               .page(@page_number)

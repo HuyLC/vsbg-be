@@ -1,7 +1,4 @@
 class Api::V1::VbbasController < Api::ApisController
-  def data
-    VbbaWorker.perform_async('')
-  end
 
   def index
     vbbas = Vabba.desc

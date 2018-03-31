@@ -4,6 +4,16 @@ class Vbba < ApplicationRecord
 
   scope :desc, -> { order(created_at: :desc) }
 
+  # rails admin
+  rails_admin do
+    field :id
+    field :name
+    field :photo
+    field :fb_id
+    field :created_at
+    field :updated_at
+  end
+
   private
 
   def set_image_by_params_image

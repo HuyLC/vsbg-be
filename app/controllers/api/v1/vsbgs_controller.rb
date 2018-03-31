@@ -1,8 +1,4 @@
 class Api::V1::VsbgsController < Api::ApisController
-  def data
-    VsbgWorker.perform_async('')
-  end
-
   def index
     vsbgs = Vsbg.desc
                 .page(@page_number)

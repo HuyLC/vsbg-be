@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
   root to: redirect('/admin')
   devise_for :admins
+  namespace :admin do
+    resources :datas, only: [:new] do
+      collection do
+        get :vsbgs
+        get :bags
+        get :vbbas
+      end
+    end
+  end
   # Admin
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
@@ -8,19 +17,10 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :vsbgs, only: [:index] do
-        collection do
-          get :data
-        end
       end
       resources :vbbas, only: [:index] do
-        collection do
-          get :data
-        end
       end
       resources :bags, only: [:index] do
-        collection do
-          get :data
-        end
       end
     end
   end
