@@ -2,6 +2,8 @@ class Vsbg < ApplicationRecord
   before_save :set_image_by_params_image
   mount_uploader :photo, VsbgUploader
 
+  scope :desc, -> { order(created_at: :desc) }
+
   private
 
   def set_image_by_params_image
